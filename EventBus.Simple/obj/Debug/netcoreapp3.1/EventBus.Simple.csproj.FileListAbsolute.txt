@@ -1,0 +1,12 @@
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.exe
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.deps.json
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.runtimeconfig.json
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.runtimeconfig.dev.json
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.Simple.pdb
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.AssemblyInfoInputs.cache
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.AssemblyInfo.cs
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.csproj.CoreCompileInputs.cache
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.pdb
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.genruntimeconfig.cache
