@@ -10,17 +10,23 @@ namespace EventBus
     {
         public static EventBus Default => new EventBus();
 
-        private readonly ConcurrentDictionary<Type, List<Type>> _handlers;
+        /// <summary>
+        /// 定义线程安全集合
+        /// </summary>
+        private readonly ConcurrentDictionary<Type, List<Type>> _eventAndHandlerMapping;
 
         public EventBus()
         {
-            _handlers = new ConcurrentDictionary<Type, List<Type>>();
+            _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<Type>>();
             MapEventToHandler();
         }
 
+        /// <summary>
+        /// 通过反射，将事件源与事件处理绑定
+        /// </summary>
         private void MapEventToHandler()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetEntryAssembly();
 
             foreach (var type in assembly.GetTypes())
             {
@@ -29,31 +35,69 @@ namespace EventBus
                 {
                     // 获取该类实现的泛型接口
                     Type handlerInterface = type.GetInterface("IEventHandler`1");
-                    // 获取泛型接口指定的参数类型
-                    Type eventDataType = handlerInterface.GetGenericArguments()[0];
 
-                    if (_handlers.ContainsKey(eventDataType))
+                    if (handlerInterface != null)
                     {
-                        List<Type> handlerTypes = _handlers[eventDataType];
-                        handlerTypes.Add(type);
-                        _handlers[eventDataType] = handlerTypes;
-                    }
-                    else
-                    {
-                        var handlerTypes = new List<Type>();
-                        handlerTypes.Add(type);
-                        _handlers[eventDataType] = handlerTypes;
+                        // 获取泛型接口指定的参数类型
+                        Type eventDataType = handlerInterface.GetGenericArguments()[0];
+
+                        if (_eventAndHandlerMapping.ContainsKey(eventDataType))
+                        {
+                            List<Type> handlerTypes = _eventAndHandlerMapping[eventDataType];
+                            handlerTypes.Add(type);
+                            _eventAndHandlerMapping[eventDataType] = handlerTypes;
+                        }
+                        else
+                        {
+                            var handlerTypes = new List<Type>();
+                            handlerTypes.Add(type);
+                            _eventAndHandlerMapping[eventDataType] = handlerTypes;
+                        }
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 手动绑定事件源与事件处理
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventHandler"></param>
+        public void Register<TEventData>(Type eventHandler)
+        {
+            List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+            if (!handlerTypes.Contains(eventHandler))
+            {
+                handlerTypes.Add(eventHandler);
+                _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
+            }
+        }
+
+        /// <summary>
+        /// 手动解除事件源与事件处理的绑定
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventHandler"></param>
+        public void UnRegister<TEventData>(Type eventHandler)
+        {
+            List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+            if (handlerTypes.Contains(eventHandler))
+            {
+                handlerTypes.Remove(eventHandler);
+                _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
+            }
+        }
+
+        /// <summary>
+        /// 根据事件源绑定触发的事件处理
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventData"></param>
         public void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData
         {
-            List<Type> handlers = new List<Type>();
-            _handlers.TryGetValue(typeof(EventData), out handlers);
+            List<Type> handlers = _eventAndHandlerMapping[eventData.GetType()];
 
-            if (handlers.Count > 0)
+            if (handlers != null && handlers.Count > 0)
             {
                 foreach (var handler in handlers)
                 {

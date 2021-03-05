@@ -21,6 +21,6 @@ namespace EventBus
         /// 事件处理器实现该方法来处理事件
         /// </summary>
         /// <param name="eventData"></param>
-        void HandlerEvent(TEventData eventData);
+        void HandleEvent(TEventData eventData);
     }
 }

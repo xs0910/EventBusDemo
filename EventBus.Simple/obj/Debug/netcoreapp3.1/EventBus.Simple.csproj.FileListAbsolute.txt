@@ -10,3 +10,7 @@ E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.dll
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.pdb
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.genruntimeconfig.cache
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.csprojAssemblyReference.cache
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\EventBus.pdb
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\obj\Debug\netcoreapp3.1\EventBus.Simple.csproj.CopyComplete

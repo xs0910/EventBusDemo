@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {
       "EventBus.Simple/1.0.0": {
+        "dependencies": {
+          "EventBus": "1.0.0"
+        },
         "runtime": {
           "EventBus.Simple.dll": {}
+        }
+      },
+      "EventBus/1.0.0": {
+        "runtime": {
+          "EventBus.dll": {}
         }
       }
     }
   },
   "libraries": {
     "EventBus.Simple/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EventBus/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -7,4 +7,8 @@
     <AssemblyName>EventBus.Simple</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EventBus\EventBus.csproj" />
+  </ItemGroup>
+
 </Project>
