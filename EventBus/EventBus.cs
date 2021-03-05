@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EventBus
 {
-    public class EventBus
+    public class EventBus : IEventBus
     {
         public static EventBus Default => new EventBus();
 
@@ -27,7 +27,10 @@ namespace EventBus
         private void MapEventToHandler()
         {
             Assembly assembly = Assembly.GetEntryAssembly();
-
+            if (assembly == null)
+            {
+                return;
+            }
             foreach (var type in assembly.GetTypes())
             {
                 // 判断当前类型是否实现了IEventHandler接口
@@ -65,11 +68,19 @@ namespace EventBus
         /// <param name="eventHandler"></param>
         public void Register<TEventData>(Type eventHandler)
         {
-            List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
-            if (!handlerTypes.Contains(eventHandler))
+            if (_eventAndHandlerMapping.Keys.Contains(typeof(TEventData)))
             {
-                handlerTypes.Add(eventHandler);
-                _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
+
+                List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+                if (!handlerTypes.Contains(eventHandler))
+                {
+                    handlerTypes.Add(eventHandler);
+                    _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
+                }
+            }
+            else
+            {
+                _eventAndHandlerMapping.TryAdd(typeof(TEventData), new List<Type>() { eventHandler });
             }
         }
 
@@ -95,7 +106,7 @@ namespace EventBus
         /// <param name="eventData"></param>
         public void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData
         {
-            List<Type> handlers = _eventAndHandlerMapping[eventData.GetType()];
+            List<Type> handlers = _eventAndHandlerMapping[typeof(TEventData)];
 
             if (handlers != null && handlers.Count > 0)
             {
@@ -110,7 +121,5 @@ namespace EventBus
                 }
             }
         }
-
-
     }
 }
