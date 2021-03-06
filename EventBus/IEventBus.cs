@@ -8,6 +8,9 @@ namespace EventBus
     {
         void Register<TEventData>(IEventHandler eventHandler);
         void Register<TEventData>(Action<TEventData> action) where TEventData : IEventData;
+
+        void Register(Type eventType, IEventHandler eventHandler);
+
         void UnRegister<TEventData>(IEventHandler eventHandler);
         void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData;
     }

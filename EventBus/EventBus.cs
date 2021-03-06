@@ -3,16 +3,15 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
 
 namespace EventBus
 {
     public class EventBus : IEventBus
     {
-        private static EventBus _eventBus = null;
-        public static EventBus Default
-        {
-            get { return _eventBus ?? (_eventBus = new EventBus()); }
-        }
+        public IWindsorContainer IocContainer { get; private set; }
+        public static EventBus Default { get; private set; }
 
         /// <summary>
         /// 定义线程安全集合
@@ -21,8 +20,14 @@ namespace EventBus
 
         public EventBus()
         {
+            IocContainer = new WindsorContainer();
             _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<IEventHandler>>();
-            MapEventToHandler();
+            //MapEventToHandler();
+        }
+
+        static EventBus()
+        {
+            Default = new EventBus();
         }
 
         /// <summary>
@@ -72,26 +77,67 @@ namespace EventBus
         /// <param name="eventHandler"></param>
         public void Register<TEventData>(IEventHandler eventHandler)
         {
-            if (_eventAndHandlerMapping.Keys.Contains(typeof(TEventData)))
-            {
-                List<IEventHandler> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
-                if (!handlerTypes.Contains(eventHandler))
-                {
-                    handlerTypes.Add(eventHandler);
-                    _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
-                }
-            }
-            else
-            {
-                //_eventAndHandlerMapping.TryAdd(typeof(TEventData), new List<IEventHandler>() { eventHandler });
-                _eventAndHandlerMapping.GetOrAdd(typeof(TEventData), (type) => new List<IEventHandler>() ).Add(eventHandler);
-            }
+            Register(typeof(TEventData), eventHandler);
         }
 
         public void Register<TEventData>(Action<TEventData> action) where TEventData : IEventData
         {
             var actionHandler = new ActionEventHandler<TEventData>(action);
             Register<TEventData>(actionHandler);
+        }
+
+        public void Register(Type eventType, IEventHandler eventHandler)
+        {
+            if (_eventAndHandlerMapping.Keys.Contains(eventType))
+            {
+                var handlerTypes = _eventAndHandlerMapping[eventType];
+                if (!handlerTypes.Contains(eventHandler))
+                {
+                    handlerTypes.Add(eventHandler);
+                    _eventAndHandlerMapping[eventType] = handlerTypes;
+                }
+            }
+            else
+            {
+                _eventAndHandlerMapping.GetOrAdd(eventType, (type) => new List<IEventHandler>()).Add(eventHandler);
+            }
+        }
+
+        /// <summary>
+        /// 提供入口支持注册其他程序集中实现的IEventHandler
+        /// </summary>
+        /// <param name="assembly"></param>
+        public void RegisterAllEventHandlerFromAssembly(Assembly assembly)
+        {
+            IocContainer.Register(Classes.FromAssembly(assembly)
+                .BasedOn(typeof(IEventHandler<>))
+                .WithService.AllInterfaces()
+                .LifestyleSingleton());
+
+            var handlers = IocContainer.Kernel.GetHandlers(typeof(IEventHandler));
+            foreach (var handler in handlers)
+            {
+                if (!typeof(IEventHandler).IsAssignableFrom(handler.ComponentModel.Implementation))
+                {
+                    return;
+                }
+
+                var interfaces = handler.ComponentModel.Implementation.GetInterfaces();
+                foreach (var @interface in interfaces)
+                {
+                    if (!typeof(IEventHandler).IsAssignableFrom(@interface))
+                    {
+                        continue;
+                    }
+                    var genericArgs = @interface.GetGenericArguments();
+                    if (genericArgs.Length == 1)
+                    {
+                        var handlerType = typeof(IEventHandler<>).MakeGenericType(genericArgs[0]);
+                        var eventHandler = IocContainer.Resolve(handlerType) as IEventHandler;
+                        Register(genericArgs[0], eventHandler);
+                    }
+                }
+            }
         }
 
         /// <summary>

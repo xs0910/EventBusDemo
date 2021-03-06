@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 
 namespace EventBus.Simple
@@ -7,6 +8,8 @@ namespace EventBus.Simple
     {
         static void Main(string[] args)
         {
+            EventBus.Default.RegisterAllEventHandlerFromAssembly(Assembly.GetExecutingAssembly());
+
             FishingRod fishingRod = new FishingRod();
 
             FishingMan fishingMan = new FishingMan("渔夫");
