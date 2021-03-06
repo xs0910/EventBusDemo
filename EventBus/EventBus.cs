@@ -8,16 +8,20 @@ namespace EventBus
 {
     public class EventBus : IEventBus
     {
-        public static EventBus Default => new EventBus();
+        private static EventBus _eventBus = null;
+        public static EventBus Default
+        {
+            get { return _eventBus ?? (_eventBus = new EventBus()); }
+        }
 
         /// <summary>
         /// 定义线程安全集合
         /// </summary>
-        private readonly ConcurrentDictionary<Type, List<Type>> _eventAndHandlerMapping;
+        private readonly ConcurrentDictionary<Type, List<IEventHandler>> _eventAndHandlerMapping;
 
         public EventBus()
         {
-            _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<Type>>();
+            _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<IEventHandler>>();
             MapEventToHandler();
         }
 
@@ -46,14 +50,14 @@ namespace EventBus
 
                         if (_eventAndHandlerMapping.ContainsKey(eventDataType))
                         {
-                            List<Type> handlerTypes = _eventAndHandlerMapping[eventDataType];
-                            handlerTypes.Add(type);
+                            List<IEventHandler> handlerTypes = _eventAndHandlerMapping[eventDataType];
+                            handlerTypes.Add(Activator.CreateInstance(type) as IEventHandler);
                             _eventAndHandlerMapping[eventDataType] = handlerTypes;
                         }
                         else
                         {
-                            var handlerTypes = new List<Type>();
-                            handlerTypes.Add(type);
+                            var handlerTypes = new List<IEventHandler>();
+                            handlerTypes.Add(Activator.CreateInstance(type) as IEventHandler);
                             _eventAndHandlerMapping[eventDataType] = handlerTypes;
                         }
                     }
@@ -66,12 +70,11 @@ namespace EventBus
         /// </summary>
         /// <typeparam name="TEventData"></typeparam>
         /// <param name="eventHandler"></param>
-        public void Register<TEventData>(Type eventHandler)
+        public void Register<TEventData>(IEventHandler eventHandler)
         {
             if (_eventAndHandlerMapping.Keys.Contains(typeof(TEventData)))
             {
-
-                List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+                List<IEventHandler> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
                 if (!handlerTypes.Contains(eventHandler))
                 {
                     handlerTypes.Add(eventHandler);
@@ -80,8 +83,15 @@ namespace EventBus
             }
             else
             {
-                _eventAndHandlerMapping.TryAdd(typeof(TEventData), new List<Type>() { eventHandler });
+                //_eventAndHandlerMapping.TryAdd(typeof(TEventData), new List<IEventHandler>() { eventHandler });
+                _eventAndHandlerMapping.GetOrAdd(typeof(TEventData), (type) => new List<IEventHandler>() ).Add(eventHandler);
             }
+        }
+
+        public void Register<TEventData>(Action<TEventData> action) where TEventData : IEventData
+        {
+            var actionHandler = new ActionEventHandler<TEventData>(action);
+            Register<TEventData>(actionHandler);
         }
 
         /// <summary>
@@ -89,9 +99,9 @@ namespace EventBus
         /// </summary>
         /// <typeparam name="TEventData"></typeparam>
         /// <param name="eventHandler"></param>
-        public void UnRegister<TEventData>(Type eventHandler)
+        public void UnRegister<TEventData>(IEventHandler eventHandler)
         {
-            List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+            List<IEventHandler> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
             if (handlerTypes.Contains(eventHandler))
             {
                 handlerTypes.Remove(eventHandler);
@@ -106,18 +116,21 @@ namespace EventBus
         /// <param name="eventData"></param>
         public void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData
         {
-            List<Type> handlers = _eventAndHandlerMapping[typeof(TEventData)];
+            List<IEventHandler> handlers = _eventAndHandlerMapping[typeof(TEventData)];
 
             if (handlers != null && handlers.Count > 0)
             {
                 foreach (var handler in handlers)
                 {
-                    MethodInfo methodInfo = handler.GetMethod("HandleEvent");
-                    if (methodInfo != null)
-                    {
-                        object obj = Activator.CreateInstance(handler);
-                        methodInfo.Invoke(obj, new object[] { eventData });
-                    }
+                    var eventHandler = handler as IEventHandler<TEventData>;
+                    eventHandler.HandleEvent(eventData);
+
+                    //MethodInfo methodInfo = handler.GetMethod("HandleEvent");
+                    //if (methodInfo != null)
+                    //{
+                    //    object obj = Activator.CreateInstance(handler);
+                    //    methodInfo.Invoke(obj, new object[] { eventData });
+                    //}
                 }
             }
         }
