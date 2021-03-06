@@ -10,7 +10,7 @@ namespace EventBus
     /// 事件总线的反射版本
     /// 存在局限性
     /// </summary>
-    public class EventBusWithReflection : IEventBus
+    public class EventBusWithReflection
     {
         public static EventBusWithReflection Default;
 

@@ -53,6 +53,11 @@ namespace EventBus.Simple
 
                 // 直接通过事件总线触发
                 EventBus.Default.Trigger(eventData);
+                //EventBus.Default.Register<EventData>(actionEventData =>
+                //{
+                //    Console.WriteLine(actionEventData.GetType());
+                //});
+
             }
 
         }
