@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace EventBus.Test
@@ -8,9 +9,10 @@ namespace EventBus.Test
     {
         protected IEventBus TestEventBus;
 
-        public EventBusTestBase()
+        protected EventBusTestBase()
         {
             TestEventBus = new EventBus();
+            TestEventBus.RegisterAllEventHandlerFromAssembly(Assembly.GetExecutingAssembly());
         }
 
     }

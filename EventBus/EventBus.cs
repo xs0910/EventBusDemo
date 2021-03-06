@@ -14,14 +14,14 @@ namespace EventBus
         public static EventBus Default { get; private set; }
 
         /// <summary>
-        /// 定义线程安全集合
+        /// 定义线程安全集合(Key:EventData,Value:List<Type>)
         /// </summary>
-        private readonly ConcurrentDictionary<Type, List<IEventHandler>> _eventAndHandlerMapping;
+        private readonly ConcurrentDictionary<Type, List<Type>> _eventAndHandlerMapping;
 
         public EventBus()
         {
             IocContainer = new WindsorContainer();
-            _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<IEventHandler>>();
+            _eventAndHandlerMapping = new ConcurrentDictionary<Type, List<Type>>();
             //MapEventToHandler();
         }
 
@@ -55,14 +55,14 @@ namespace EventBus
 
                         if (_eventAndHandlerMapping.ContainsKey(eventDataType))
                         {
-                            List<IEventHandler> handlerTypes = _eventAndHandlerMapping[eventDataType];
-                            handlerTypes.Add(Activator.CreateInstance(type) as IEventHandler);
+                            List<Type> handlerTypes = _eventAndHandlerMapping[eventDataType];
+                            handlerTypes.Add(type);
                             _eventAndHandlerMapping[eventDataType] = handlerTypes;
                         }
                         else
                         {
-                            var handlerTypes = new List<IEventHandler>();
-                            handlerTypes.Add(Activator.CreateInstance(type) as IEventHandler);
+                            var handlerTypes = new List<Type>();
+                            handlerTypes.Add(type);
                             _eventAndHandlerMapping[eventDataType] = handlerTypes;
                         }
                     }
@@ -77,7 +77,7 @@ namespace EventBus
         /// <param name="eventHandler"></param>
         public void Register<TEventData>(IEventHandler eventHandler)
         {
-            Register(typeof(TEventData), eventHandler);
+            Register(typeof(TEventData), eventHandler.GetType());
         }
 
         public void Register<TEventData>(Action<TEventData> action) where TEventData : IEventData
@@ -86,7 +86,7 @@ namespace EventBus
             Register<TEventData>(actionHandler);
         }
 
-        public void Register(Type eventType, IEventHandler eventHandler)
+        public void Register(Type eventType, Type eventHandler)
         {
             if (_eventAndHandlerMapping.Keys.Contains(eventType))
             {
@@ -99,7 +99,7 @@ namespace EventBus
             }
             else
             {
-                _eventAndHandlerMapping.GetOrAdd(eventType, (type) => new List<IEventHandler>()).Add(eventHandler);
+                _eventAndHandlerMapping.GetOrAdd(eventType, (type) => new List<Type>()).Add(eventHandler);
             }
         }
 
@@ -132,9 +132,9 @@ namespace EventBus
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        var handlerType = typeof(IEventHandler<>).MakeGenericType(genericArgs[0]);
-                        var eventHandler = IocContainer.Resolve(handlerType) as IEventHandler;
-                        Register(genericArgs[0], eventHandler);
+                        //var handlerType = typeof(IEventHandler<>).MakeGenericType(genericArgs[0]);
+                        //var eventHandler = IocContainer.Resolve(handlerType) as IEventHandler;
+                        Register(genericArgs[0], handler.ComponentModel.Implementation);
                     }
                 }
             }
@@ -145,14 +145,10 @@ namespace EventBus
         /// </summary>
         /// <typeparam name="TEventData"></typeparam>
         /// <param name="eventHandler"></param>
-        public void UnRegister<TEventData>(IEventHandler eventHandler)
+        public void UnRegister<TEventData>(Type eventHandler)
         {
-            List<IEventHandler> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
-            if (handlerTypes.Contains(eventHandler))
-            {
-                handlerTypes.Remove(eventHandler);
-                _eventAndHandlerMapping[typeof(TEventData)] = handlerTypes;
-            }
+            //List<Type> handlerTypes = _eventAndHandlerMapping[typeof(TEventData)];
+            _eventAndHandlerMapping.GetOrAdd(typeof(TEventData), (type) => new List<Type>()).RemoveAll(t => t == eventHandler);
         }
 
         /// <summary>
@@ -162,14 +158,18 @@ namespace EventBus
         /// <param name="eventData"></param>
         public void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData
         {
-            List<IEventHandler> handlers = _eventAndHandlerMapping[typeof(TEventData)];
+            List<Type> handlers = _eventAndHandlerMapping[typeof(TEventData)];
 
             if (handlers != null && handlers.Count > 0)
             {
                 foreach (var handler in handlers)
                 {
-                    var eventHandler = handler as IEventHandler<TEventData>;
-                    eventHandler.HandleEvent(eventData);
+                    //var eventHandler = handler as IEventHandler<TEventData>;
+                    //eventHandler.HandleEvent(eventData);
+
+                    var handlerType = handler.GetInterface("IEventHandler`1");
+                    var eventHandler = IocContainer.Resolve(handlerType) as IEventHandler<TEventData>;
+                    eventHandler?.HandleEvent(eventData);
 
                     //MethodInfo methodInfo = handler.GetMethod("HandleEvent");
                     //if (methodInfo != null)
