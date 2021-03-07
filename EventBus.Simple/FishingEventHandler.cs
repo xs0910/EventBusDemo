@@ -12,4 +12,12 @@ namespace EventBus.Simple
             Console.WriteLine($"{eventData.FishingMan.Name }:钓到一条{eventData.FishType}，已经钓到{eventData.FishingMan.FishCount}条鱼了");
         }
     }
+
+    public class FishingEventHandler2 : IEventHandler<FishingEventData>
+    {
+        public void HandleEvent(FishingEventData eventData)
+        {
+            Console.WriteLine("hhhh");
+        }
+    }
 }

@@ -15,3 +15,4 @@ E:\Code_Tech\EventBus\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.Ass
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.dll
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.pdb
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.csproj.CoreCompileInputs.cache
+E:\Code_Tech\EventBus\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.csprojAssemblyReference.cache
