@@ -17,6 +17,9 @@ namespace EventBus.Test
             TestEventHandler.TestValue.ShouldBe(1);
         }
 
+        /// <summary>
+        /// 默认实现的IEventHandler通过程序集默认已经注册
+        /// </summary>
         [Fact]
         public void Should_Auto_Call_Without_Registered()
         {
@@ -25,6 +28,9 @@ namespace EventBus.Test
             TestEventHandler.TestValue.ShouldBe(1);
         }
 
+        /// <summary>
+        /// 已经卸载的IEventHandler，无法触发
+        /// </summary>
         [Fact]
         public void Should_Not_Trigger_After_UnRegistered()
         {
@@ -33,6 +39,15 @@ namespace EventBus.Test
             TestEventBus.Trigger<TestEventData>(new TestEventData(2));
 
             TestEventHandler.TestValue.ShouldBe(0);
+        }
+
+        [Fact]
+        public void Should_Call_Action_Handler()
+        {
+            var count = 0;
+            TestEventBus.Register<EventData>(actionEventData => { count++; });
+            TestEventBus.Trigger(new EventData());
+            count.ShouldBe(1);
         }
     }
 }
