@@ -1,6 +1,7 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace EventBus.Test
@@ -49,5 +50,13 @@ namespace EventBus.Test
             TestEventBus.Trigger(new EventData());
             count.ShouldBe(1);
         }
+
+        [Fact]
+        public async Task Should_Call_Handler_Async()
+        {
+            await TestEventBus.TriggerAsync(new TestEventData(123));
+            TestEventHandler.TestValue.ShouldBe(123);
+        }
+
     }
 }

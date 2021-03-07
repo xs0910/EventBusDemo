@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
@@ -80,13 +81,28 @@ namespace EventBus
             Register(typeof(TEventData), eventHandler.GetType());
         }
 
+        /// <summary>
+        /// 注册Action事件处理器
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="action"></param>
         public void Register<TEventData>(Action<TEventData> action) where TEventData : IEventData
         {
+            // 1.构造ActionEventHandler
             var actionHandler = new ActionEventHandler<TEventData>(action);
+
+            // 2.将ActionEventHandler的实例注入到IOC容器
             IocContainer.Register(Component.For<IEventHandler<TEventData>>().UsingFactoryMethod(() => actionHandler));
+
+            // 3.注册到事件总线
             Register<TEventData>(actionHandler);
         }
 
+        /// <summary>
+        /// 手动绑定事件源与事件处理
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="eventHandler"></param>
         public void Register(Type eventType, Type eventHandler)
         {
             // 问题：当同一个泛型接口注册了多个实现到IOC容器，则在依赖解析时总是解析到第一个实现
@@ -181,11 +197,58 @@ namespace EventBus
                         if (eventHandler.GetType() == handlerType)
                         {
                             var handler = eventHandler as IEventHandler<TEventData>;
-                            handler.HandleEvent(eventData);
+                            handler?.HandleEvent(eventData);
                         }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 触发指定的EventHandler
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventData"></param>
+        /// <param name="eventHandlerType"></param>
+        public void Trigger<TEventData>(TEventData eventData, Type eventHandlerType) where TEventData : IEventData
+        {
+            // 获取类型实习的泛型接口
+            var handlerInterface = eventHandlerType.GetInterface("IEventHandler`1");
+
+            var eventHandlers = IocContainer.ResolveAll(handlerInterface);
+
+            // 循环遍历，仅当解析的实例类型与映射字典中事件处理类型一致，才触发事件
+            foreach (var eventHandler in eventHandlers)
+            {
+                if (eventHandler.GetType() == eventHandlerType)
+                {
+                    var handler = eventHandler as IEventHandler<TEventData>;
+                    handler?.HandleEvent(eventData);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 异步触发
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventData"></param>
+        /// <returns></returns>
+        public Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : IEventData
+        {
+            return Task.Run(() => Trigger<TEventData>(eventData));
+        }
+
+        /// <summary>
+        /// 异步触发
+        /// </summary>
+        /// <typeparam name="TEventData"></typeparam>
+        /// <param name="eventData"></param>
+        /// <param name="eventHandlerType"></param>
+        /// <returns></returns>
+        public Task TriggerAsycn<TEventData>(TEventData eventData, Type eventHandlerType) where TEventData : IEventData
+        {
+            return Task.Run(() => Trigger(eventData, eventHandlerType));
         }
     }
 }

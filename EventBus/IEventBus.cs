@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EventBus
 {
@@ -15,6 +16,13 @@ namespace EventBus
         void RegisterAllEventHandlerFromAssembly(Assembly assembly);
 
         void UnRegister<TEventData>(Type eventHandler);
+
         void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData;
+
+        void Trigger<TEventData>(TEventData eventData, Type eventHandlerType) where TEventData : IEventData;
+
+        Task TriggerAsync<TEventData>(TEventData eventData) where TEventData : IEventData;
+
+        Task TriggerAsycn<TEventData>(TEventData eventData, Type eventHandlerType) where TEventData : IEventData;
     }
 }
