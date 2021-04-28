@@ -6,7 +6,6 @@ E:\Studio\EventBus事件总线\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\Eve
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.csproj.CoreCompileInputs.cache
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.dll
 E:\Studio\EventBus事件总线\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.pdb
-E:\Studio\EventBus事件总线\EventBusDemo\EventBus\obj\Debug\netcoreapp3.1\EventBus.csprojAssemblyReference.cache
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\bin\Debug\netcoreapp3.1\EventBus.deps.json
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\bin\Debug\netcoreapp3.1\EventBus.dll
 E:\Code_Tech\EventBus\EventBusDemo\EventBus\bin\Debug\netcoreapp3.1\EventBus.pdb

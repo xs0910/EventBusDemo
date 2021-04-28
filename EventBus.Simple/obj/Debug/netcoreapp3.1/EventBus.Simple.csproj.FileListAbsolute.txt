@@ -40,3 +40,13 @@ E:\Code_Tech\EventBus\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Syste
 E:\Code_Tech\EventBus\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 E:\Code_Tech\EventBus\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
 E:\Code_Tech\EventBus\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Castle.Core.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Castle.Windsor.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\log4net.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
+E:\Studio\EventBus事件总线\EventBusDemo\EventBus.Simple\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll

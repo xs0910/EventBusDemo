@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj": {}
+    "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj": {}
   },
   "projects": {
-    "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj": {
+    "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj",
+        "projectUniqueName": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj",
         "projectName": "EventBus.Simple",
-        "projectPath": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj",
-        "packagesPath": "C:\\Users\\cxt\\.nuget\\packages\\",
-        "outputPath": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus.Simple\\obj\\",
+        "projectPath": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus.Simple\\EventBus.Simple.csproj",
+        "packagesPath": "C:\\Users\\kingdee\\.nuget\\packages\\",
+        "outputPath": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus.Simple\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\cxt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kingdee\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,15 +22,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
-          "https://www.nuget.org/api/v2/": {}
+          "http://172.18.8.187:5001/v3/index.json": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\EventBus.csproj": {
-                "projectPath": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\EventBus.csproj"
+              "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\EventBus.csproj": {
+                "projectPath": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\EventBus.csproj"
               }
             }
           }
@@ -46,6 +43,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "imports": [
             "net461",
             "net462",
@@ -61,24 +59,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\EventBus.csproj": {
+    "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\EventBus.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\EventBus.csproj",
+        "projectUniqueName": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\EventBus.csproj",
         "projectName": "EventBus",
-        "projectPath": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\EventBus.csproj",
-        "packagesPath": "C:\\Users\\cxt\\.nuget\\packages\\",
-        "outputPath": "E:\\Code_Tech\\EventBus\\EventBusDemo\\EventBus\\obj\\",
+        "projectPath": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\EventBus.csproj",
+        "packagesPath": "C:\\Users\\kingdee\\.nuget\\packages\\",
+        "outputPath": "F:\\Studio\\EventBus事件总线\\EventBusDemo\\EventBus\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\cxt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kingdee\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -86,12 +81,12 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
-          "https://www.nuget.org/api/v2/": {}
+          "http://172.18.8.187:5001/v3/index.json": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -103,6 +98,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Castle.Windsor": {
               "target": "Package",
@@ -128,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
